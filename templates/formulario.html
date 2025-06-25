@@ -35,40 +35,48 @@
         <h1 class="text-3xl font-bold mb-6 text-center">Predicción de NOx</h1>
 
         <form id="formPrediccion" class="space-y-4" onsubmit="enviarPrediccion(event)">
-            <!-- TAT -->
-            <div>
-                <label for="TAT" class="block font-semibold mb-1">TAT (Temp. Aire Turbina):</label>
-                <input type="number" step="any" id="TAT" name="TAT" required class="..." />
-            </div>
-
-            <!-- AFDP -->
-            <div>
-                <label for="AFDP" class="block font-semibold mb-1">AFDP (Presión Filtro):</label>
-                <input type="number" step="any" id="AFDP" name="AFDP" required class="..." />
-            </div>
-
-            <!-- CO -->
-            <div>
-                <label for="CO" class="block font-semibold mb-1">CO:</label>
-                <input type="number" step="any" id="CO" name="CO" required class="..." />
-            </div>
-
             <!-- AT -->
             <div>
-                <label for="AT" class="block font-semibold mb-1">AT (Temperatura Ambiente):</label>
-                <input type="number" step="any" id="AT" name="AT" required class="..." />
-            </div>
-
-            <!-- GTEP -->
-            <div>
-                <label for="GTEP" class="block font-semibold mb-1">GTEP (Presión Escape Turbina):</label>
-                <input type="number" step="any" id="GTEP" name="GTEP" required class="..." />
+                <label for="AT" class="block font-semibold text-gray-700">AT (Temperatura Ambiente)</label>
+                <input type="number" name="AT" id="AT" step="any" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
             </div>
 
             <!-- AH -->
             <div>
-                <label for="AH" class="block font-semibold mb-1">AH (Humedad Ambiente):</label>
-                <input type="number" step="any" id="AH" name="AH" required class="..." />
+                <label for="AH" class="block font-semibold text-gray-700">AH (Humedad Ambiente)</label>
+                <input type="number" name="AH" id="AH" step="any" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+            </div>
+
+            <!-- AFDP -->
+            <div>
+                <label for="AFDP" class="block font-semibold text-gray-700">AFDP (Presión Diferencial del Filtro de
+                    Aire)</label>
+                <input type="number" name="AFDP" id="AFDP" step="any" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+            </div>
+
+            <!-- GTEP -->
+            <div>
+                <label for="GTEP" class="block font-semibold text-gray-700">GTEP (Presión de Escape de la Turbina de
+                    Gas)</label>
+                <input type="number" name="GTEP" id="GTEP" step="any" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+            </div>
+
+            <!-- TAT -->
+            <div>
+                <label for="TAT" class="block font-semibold text-gray-700">TAT (Temperatura de Aire en Turbina)</label>
+                <input type="number" name="TAT" id="TAT" step="any" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
+            </div>
+
+            <!-- CO -->
+            <div>
+                <label for="CO" class="block font-semibold text-gray-700">CO (Monóxido de Carbono)</label>
+                <input type="number" name="CO" id="CO" step="any" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none">
             </div>
 
             <button id="submitBtn" type="submit"
