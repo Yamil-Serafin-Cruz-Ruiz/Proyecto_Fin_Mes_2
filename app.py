@@ -2,13 +2,13 @@ from flask import Flask, request, jsonify, render_template
 import numpy as np
 import pickle
 import logging
+import joblib
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Carga del modelo entrenado
-with open('modelo_neuronal_regresion.pkl', 'rb') as f:
-    model = pickle.load(f)
+model = joblib.load('modelo_neuronal_regresion.pkl')
 
 app.logger.debug('Modelo cargado correctamente')
 
