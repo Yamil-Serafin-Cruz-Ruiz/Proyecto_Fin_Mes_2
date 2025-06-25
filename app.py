@@ -21,16 +21,12 @@ def predict():
     try:
         # Obtener los valores enviados
         features = [
-            float(request.form['AT']),
-            float(request.form['AP']),
-            float(request.form['AH']),
-            float(request.form['AFDP']),
-            float(request.form['GTEP']),
-            float(request.form['TIT']),
             float(request.form['TAT']),
-            float(request.form['TEY']),
-            float(request.form['CDO']),
+            float(request.form['AFDP']),
             float(request.form['CO']),
+            float(request.form['AT']),
+            float(request.form['GTEP']),
+            float(request.form['AH']),
         ]
 
         app.logger.debug(f'Valores recibidos para predicción: {features}')
