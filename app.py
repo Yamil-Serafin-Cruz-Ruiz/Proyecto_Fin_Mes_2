@@ -9,6 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Carga del modelo entrenado
 model = joblib.load('modelo_neuronal_regresion.pkl')
+scaler = joblib.load('scaler.pkl')
 
 app.logger.debug('Modelo cargado correctamente')
 
@@ -32,7 +33,9 @@ def predict():
         app.logger.debug(f'Valores recibidos para predicción: {features}')
 
         input_array = np.array([features])
-        prediction = model.predict(input_array)
+        input_scaled = scaler.transform(input_array)
+
+        prediction = model.predict(input_scaled)
         app.logger.debug(f'Predicción calculada: {prediction[0]}')
 
         return jsonify({'prediccion': float(prediction[0])})
