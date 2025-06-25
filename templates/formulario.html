@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Predicción NOx</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f4f6f8;
+      color: #111111;
+      min-height: 100vh;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .form-container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+    <h1 class="text-3xl font-bold mb-6 text-center">Predicción de NOx</h1>
+
+    <form id="formPrediccion" class="space-y-4" onsubmit="enviarPrediccion(event)">
+      <div>
+        <label for="AT" class="block font-semibold mb-1">AT (Temperatura Ambiente):</label>
+        <input type="number" step="any" id="AT" name="AT" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="AP" class="block font-semibold mb-1">AP (Presión Ambiente):</label>
+        <input type="number" step="any" id="AP" name="AP" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="AH" class="block font-semibold mb-1">AH (Humedad Ambiente):</label>
+        <input type="number" step="any" id="AH" name="AH" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="AFDP" class="block font-semibold mb-1">AFDP (Presión Filtro):</label>
+        <input type="number" step="any" id="AFDP" name="AFDP" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="GTEP" class="block font-semibold mb-1">GTEP (Presión Escape Turbina):</label>
+        <input type="number" step="any" id="GTEP" name="GTEP" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="TIT" class="block font-semibold mb-1">TIT (Temp. Entrada Turbina):</label>
+        <input type="number" step="any" id="TIT" name="TIT" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="TAT" class="block font-semibold mb-1">TAT (Temp. Aire Turbina):</label>
+        <input type="number" step="any" id="TAT" name="TAT" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="TEY" class="block font-semibold mb-1">TEY:</label>
+        <input type="number" step="any" id="TEY" name="TEY" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="CDO" class="block font-semibold mb-1">CDO:</label>
+        <input type="number" step="any" id="CDO" name="CDO" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="CO" class="block font-semibold mb-1">CO:</label>
+        <input type="number" step="any" id="CO" name="CO" required
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+
+      <button
+        id="submitBtn"
+        type="submit"
+        class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg transition-colors"
+      >
+        Predecir NOx
+      </button>
+
+      <div id="loadingSpinner" class="hidden flex items-center justify-center py-4">
+        <svg class="animate-spin h-6 w-6 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+          viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
+        <span class="ml-3 text-yellow-700 font-medium">Analizando datos...</span>
+      </div>
+
+      <div id="resultado" class="mt-6 text-center font-semibold text-lg"></div>
+    </form>
+  </div>
+
+  <script>
+    function enviarPrediccion(event) {
+      event.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const resultado = document.getElementById('resultado');
+
+      // Deshabilitar botón y mostrar spinner
+      submitBtn.disabled = true;
+      loadingSpinner.classList.remove('hidden');
+      resultado.textContent = '';
+
+      // Obtener valores del formulario
+      const formData = new URLSearchParams(new FormData(event.target)).toString();
+
+      fetch('/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            resultado.innerHTML = `<p class="text-red-600">${data.error}</p>`;
+          } else {
+            resultado.textContent = `NOx predicho: ${data.prediccion}`;
+          }
+        })
+        .catch(() => {
+          resultado.innerHTML = `<p class="text-red-600">Error en la comunicación con el servidor.</p>`;
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          loadingSpinner.classList.add('hidden');
+        });
+    }
+  </script>
+</body>
+
+</html>
