@@ -8,7 +8,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Carga del modelo entrenado
-model = joblib.load('network_neuronal.pkl')
+model = joblib.load('rfr_model.pkl')
 scaler = joblib.load('scaler_6.pkl')
 
 app.logger.debug('Modelo cargado correctamente')
