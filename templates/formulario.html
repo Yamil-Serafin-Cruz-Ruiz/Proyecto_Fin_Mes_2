@@ -107,10 +107,17 @@
         <!-- Header -->
         <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-16 h-16 icon-container rounded-full mb-4">
-                <i class="fas fa-chart-line text-white text-2xl"></i>
+                <i class="fas fa-flask text-white text-2xl"></i>
             </div>
             <h1 class="text-4xl font-bold text-white mb-2">Predicción NOx</h1>
             <p class="text-white/80 text-lg">Sistema inteligente de análisis de emisiones</p>
+            <div class="max-w-2xl mx-auto mt-4 p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                <p class="text-white/90 text-sm leading-relaxed">
+                    <i class="fas fa-info-circle mr-2 text-blue-300"></i>
+                    Ingresa los parámetros ambientales y operacionales para obtener una predicción precisa de los niveles de óxidos de nitrógeno (NOx). 
+                    Este sistema utiliza algoritmos de machine learning para analizar las condiciones de la turbina y predecir las emisiones.
+                </p>
+            </div>
         </div>
 
         <!-- Main Container -->
@@ -192,24 +199,30 @@
                         </div>
                     </div>
 
-                    <!-- Submit Button -->
-                    <div class="flex flex-col items-center space-y-4">
+                    <!-- Submit Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                         <button id="submitBtn" type="submit"
-                                class="btn-primary w-full md:w-auto px-12 py-4 text-white font-semibold rounded-xl shadow-lg flex items-center justify-center space-x-3">
+                                class="btn-primary w-full sm:w-auto px-8 py-4 text-white font-semibold rounded-xl shadow-lg flex items-center justify-center space-x-3">
                             <i class="fas fa-calculator"></i>
                             <span>Realizar Predicción</span>
                         </button>
+                        
+                        <button id="clearBtn" type="button"
+                                class="w-full sm:w-auto px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-xl shadow-lg flex items-center justify-center space-x-3 transition-all duration-300 hover:transform hover:-translate-y-1">
+                            <i class="fas fa-eraser"></i>
+                            <span>Limpiar Campos</span>
+                        </button>
+                    </div>
 
-                        <!-- Loading Spinner -->
-                        <div id="loadingSpinner" class="hidden flex items-center justify-center py-6">
-                            <div class="relative">
-                                <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <i class="fas fa-brain text-indigo-600 text-sm"></i>
-                                </div>
+                    <!-- Loading Spinner -->
+                    <div id="loadingSpinner" class="hidden flex items-center justify-center py-6">
+                        <div class="relative">
+                            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-brain text-indigo-600 text-sm"></i>
                             </div>
-                            <span class="ml-4 text-indigo-700 font-medium text-lg">Analizando datos...</span>
                         </div>
+                        <span class="ml-4 text-indigo-700 font-medium text-lg">Analizando datos...</span>
                     </div>
                 </form>
 
@@ -316,7 +329,36 @@
                     this.parentElement.parentElement.style.transform = 'translateY(-2px)';
                 });
             });
+
+            // Función para limpiar todos los campos
+            document.getElementById('clearBtn').addEventListener('click', function() {
+                const form = document.getElementById('formPrediccion');
+                const inputs = form.querySelectorAll('input[type="number"]');
+                const resultado = document.getElementById('resultado');
+                
+                // Limpiar todos los inputs
+                inputs.forEach(input => {
+                    input.value = '';
+                    // Trigger blur para resetear las labels flotantes
+                    input.blur();
+                });
+                
+                // Limpiar resultado si existe
+                resultado.innerHTML = '';
+                
+                // Efecto visual de confirmación
+                this.innerHTML = '<i class="fas fa-check mr-3"></i><span>¡Limpiado!</span>';
+                this.classList.add('bg-green-500', 'hover:bg-green-600');
+                this.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-eraser mr-3"></i><span>Limpiar Campos</span>';
+                    this.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    this.classList.add('bg-gray-500', 'hover:bg-gray-600');
+                }, 1500);
+            });
         });
     </script>
 </body>
+
 </html>
